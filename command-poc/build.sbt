@@ -7,5 +7,6 @@ libraryDependencies ++= Seq(
   "org.iq80.leveldb" % "leveldb" % "0.7",
   "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8"
 )
+libraryDependencies += "com.github.dnvriend" %% "akka-persistence-jdbc" % "3.0.1"
 
 licenses := Seq(("CC0", url("http://creativecommons.org/publicdomain/zero/1.0")))
