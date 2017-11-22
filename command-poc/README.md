@@ -1,4 +1,4 @@
-## Akka Persistence Samples
+## Akka Persistence POC
 
 This POC contains examples that illustrate a subset of[Akka Persistence](http://doc.akka.io/docs/akka/2.5/java/persistence.html) features.
 
