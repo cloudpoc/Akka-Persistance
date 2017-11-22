@@ -1,35 +1,35 @@
 ## Akka Persistence Samples
 
-This tutorial contains examples that illustrate a subset of[Akka Persistence](http://doc.akka.io/docs/akka/2.5/java/persistence.html) features.
+This POC contains examples that illustrate a subset of[Akka Persistence](http://doc.akka.io/docs/akka/2.5/java/persistence.html) features.
 
 - persistent actor
-- persistent actor snapshots
 - persistent actor recovery
 - persistent actor views
 
-Custom storage locations for the journal and snapshots can be defined in [application.conf](src/main/resources/application.conf).
-
 ## Persistent actor
 
-[PersistentActorExample.java](src/main/java/sample/persistence/PersistentActorExample.java) is described in detail in the [Event sourcing](http://doc.akka.io/docs/akka/2.5/java/persistence.html#event-sourcing-java) section of the user documentation. With every application run, the `ExamplePersistentActor` is recovered from events stored in previous application runs, processes new commands, stores new events and snapshots and prints the current persistent actor state to `stdout`.
+[StateFullActor.java] is an example of persistent actor which will persist the message as a series of event before it updates/handle the same . We are consider this actor as statefull actor as it update its state(here with order details) wvwry time it gets new order
 
-To run this example, type `sbt "runMain PersistentActorExample"` or `mvn compile exec:java -Dexec.mainClass="PersistentActorExample"`.
-
-## Persistent actor snapshots
-
-[SnapshotExample.java](src/main/java/sample/persistence/SnapshotExample.java) demonstrates how persistent actors can take snapshots of application state and recover from previously stored snapshots. Snapshots are offered to persistent actors at the beginning of recovery, before any messages (younger than the snapshot) are replayed.
-
-To run this example, type `sbt "runMain sample.persistence.SnapshotExample"` or `mvn compile exec:java -Dexec.mainClass="sample.persistence.SnapshotExample"`. With every run, the state offered by the most recent snapshot is printed to `stdout`, followed by the updated state after sending new persistent messages to the persistent actor.
 
 ## Persistent actor recovery
 
-[PersistentActorFailureExample.java](src/main/java/sample/persistence/PersistentActorFailureExample.java) shows how a persistent actor can throw an exception, restart and restore the state by replaying the events.
+[StateFullActor.java] is also responsible for recovering the event after evrytime it crashes and update its own state
+In this POC we have taken current shopping cart is our actor internal state where it update the list every time he gets a new order
 
-To run this example, type `sbt "runMain sample.persistence.PersistentActorFailureExample"` or `mvn compile exec:java -Dexec.mainClass="sample.persistence.PersistentActorFailureExample"`.
+Note:- This might not be a good example for real time.
 
 ## Persistent actor views
 
-[ViewExample.java](src/main/java/sample/persistence/ViewExample.java) demonstrates how a view (`ExampleView`) is updated with the persistent message stream of a persistent actor (`ExamplePersistentActor`). Messages sent to the persistent actor are scheduled periodically. Views also support snapshotting to reduce recovery time.
+[ViewActorApp.java] A perisitant actor persist the event into a immutable storage as bite format ,it means that you cannot manually query  or change the same. This is where aka view part comes into picture . Aka provides a way to read the event from the journel that peristent actor persist the events. And this should be seperate actor system all together to align with CQRS concept[Command Query responsibility separation  ]
 
-To run this example, type `sbt "runMain sample.persistence.PersistentViewExample"` or `mvn compile exec:java -Dexec.mainClass="sample.persistence.PersistentViewExample"`.
 
+To run this example, follow below steps
+------------------------------------------------------
+1) sbt run - with this it will show both option a)PersistentActorApp b) ViewActorApp
+2) choose option a first as we need to fill our journel with some event
+3) Next time when you run ,choose option as b which will demonstrate the view part of aka persistance
+
+
+TO DO
+--------------
+Needs to implement saving the snapshot periodically 
